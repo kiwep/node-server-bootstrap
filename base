@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# get the scripts directory
+pushd &> /dev/null
+cd `dirname "$0"`
+ROOTDIR=`pwd`
+popd &> /dev/null
+
+SCPTNAME=`basename "$0"`
+PIDFILE="$ROOTDIR/var/$SCPTNAME.pid"
+
+load_pid() {
+	if [ -f "$PIDFILE" ]; then
+		PID=`cat "$PIDFILE"`
+	else
+		PID=""
+	fi
+}
+
+check_pid_start() {
+	kill -0 ${PID} &> /dev/null
+	if [ "$?" = "0" ]; then
+		echo "ERROR: Can not start service \"$SCPTNAME\", it is already running!"
+		exit 1
+	fi
+}
+
+check_pid_exists() {
+	ERR=""
+	if [ "$PID" != "" ]; then
+		kill -0 ${PID} &> /dev/null
+		if [ "$?" != "0" ]; then
+			ERR="process not found"
+		fi
+	else
+		ERR="no pid file found"
+	fi
+
+	if [ "$ERR" != "" ]; then
+		echo "ERROR: Service \"$SCPTNAME\" does not appear to be running ($ERR)!"
+		exit 1
+	fi
+}
+
+wait_for_exit() {
+	kill -0 ${PID} &> /dev/null
+	RT=$?
+	while [ "$RT" != "1" ]; do
+		sleep 1
+		kill -0 ${PID} &> /dev/null
+		RT=$?
+	done
+}
+
+start() {
+	BINNAME="$ROOTDIR/js/$SCPTNAME.js"
+	if [ -x "$BINNAME" ]; then
+		$BINNAME &> "$ROOTDIR/log/$SCPTNAME.log" &
+	else
+		echo "ERROR: Can not start service, \"$BINNAME\" not found, or not executable!";
+		exit 1
+	fi
+}
+
+case "$1" in
+	start)
+		load_pid
+		check_pid_start
+		start
+	;;
+
+	stop)
+		load_pid
+		check_pid_exists
+		kill $PID
+		wait_for_exit
+	;;
+
+	reload)
+		load_pid
+		check_pid_exists
+		kill -HUP $PID
+	;;
+
+	restart)
+		load_pid
+		check_pid_exists
+		kill $PID
+		wait_for_exit
+		start
+	;;
+
+	*)
+		echo "Usage: $ROOTDIR/$SCPTNAME {start|stop|reload|restart}"
+		exit 1
+esac
+
+exit 0

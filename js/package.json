@@ -1,0 +1,13 @@
+{
+	"name": "Base",
+	"version": "0.0.1",
+	"description": "Base Server",
+	"license": "MIT",
+	"author": {
+	  "name": ""
+	},
+	"dependencies": {
+	},
+	"repository": {
+	}
+}

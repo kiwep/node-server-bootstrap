@@ -1,0 +1,50 @@
+{
+	"development": {
+
+		"logLevel": "info",
+
+		"cluster": {
+			"workers": 1,
+			"threadLifetime": 0
+		},
+
+		"watchFilesForChange": {
+			"enabled": true,
+			"paths": ["etc", "js"],
+			"extensions": [".js", ".json"],
+			"exclude": ["node_modules", "^\\.", "^~"],
+			"reportInterval": 500
+		},
+
+		"worker": {
+			"httpServer": {
+				"listenPort": 5566
+			}
+		}
+	},
+
+	"production": {
+
+		"logLevel": "warn",
+
+		"cluster": {
+			"workers": 0,
+			"threadLifetime": 14400
+		},
+
+		"watchFilesForChange": {
+			"enabled": false,
+			"paths": ["etc", "js"],
+			"extensions": [".js", ".json"],
+			"exclude": ["node_modules", "^\\.", "^~"],
+			"reportInterval": 7000
+		},
+
+		"worker": {
+			"httpServer": {
+				"listenPort": 5566
+			}
+		}
+
+	}
+}
