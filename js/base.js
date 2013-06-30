@@ -59,7 +59,6 @@ function shutdown() {
 
 	// cleanup
 	clearInterval(threadRestartInterval);
-	cc.clearPidFile();
 	cc.killChangeWatchers();
 
 	if (masterRestarting) {
@@ -69,6 +68,7 @@ function shutdown() {
 		startup();
 	}
 	else {
+		cc.clearPidFile();
 		cc.log(cc.INFO, 'Master: Exit');
 	}
 }
