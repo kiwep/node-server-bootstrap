@@ -9,6 +9,12 @@ popd &> /dev/null
 SCPTNAME=`basename "$0"`
 PIDFILE="$ROOTDIR/var/$SCPTNAME.pid"
 
+ENVFILE="$ROOTDIR/etc/env"
+
+if [ -f "$ENVFILE" ]; then
+	. "$ENVFILE"
+fi
+
 load_pid() {
 	if [ -f "$PIDFILE" ]; then
 		PID=`cat "$PIDFILE"`
@@ -55,7 +61,17 @@ wait_for_exit() {
 start() {
 	BINNAME="$ROOTDIR/js/$SCPTNAME.js"
 	if [ -x "$BINNAME" ]; then
-		$BINNAME &> "$ROOTDIR/log/$SCPTNAME.log" &
+		$BINNAME 2>&1 >> "$ROOTDIR/log/$SCPTNAME.log" &
+	else
+		echo "ERROR: Can not start service, \"$BINNAME\" not found, or not executable!";
+		exit 1
+	fi
+}
+
+run() {
+	BINNAME="$ROOTDIR/js/$SCPTNAME.js"
+	if [ -x "$BINNAME" ]; then
+		$BINNAME
 	else
 		echo "ERROR: Can not start service, \"$BINNAME\" not found, or not executable!";
 		exit 1
@@ -90,8 +106,14 @@ case "$1" in
 		start
 	;;
 
+	run)
+		load_pid
+		check_pid_start
+		run
+	;;
+
 	*)
-		echo "Usage: $ROOTDIR/$SCPTNAME {start|stop|reload|restart}"
+		echo "Usage: $ROOTDIR/$SCPTNAME {start|stop|reload|restart|run}"
 		exit 1
 esac
 

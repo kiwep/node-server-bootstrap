@@ -83,7 +83,7 @@ function handleSigTermInt() {
 
 	terminating = true;
 
-	if (cluster.workers.length) {
+	if (runningWorkerCount > 0) {
 		cc.log(cc.INFO, 'Master: Shutting down worker threads');
 		eachWorker(function(worker) {
 			worker.disconnect();
