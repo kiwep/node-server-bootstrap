@@ -39,25 +39,12 @@ exports.loadConfiguration = function(callback)
 		// process conf
 		var conf = JSON.parse(data)[nodeEnv];
 
-		// load env file content
-		fs.readFile(envFileName, { encoding: 'utf-8' }, function(err, data) {
-			if (err) { if (callback) callback(err); return; }
+		// internals
+		currentLogLevel = logLevels[conf.logLevel];
 
-			// process enviroment
-			var env = JSON.parse(data)[nodeEnv];
-			for (k in env) {
-				if (env.hasOwnProperty(k)) {
-					process.env[k] = env[k];
-				}
-			}
+		// done, callback
+		if (callback) callback(undefined, conf);
 
-			// internals
-			currentLogLevel = logLevels[conf.logLevel];
-
-			// done, callback
-			if (callback) callback(undefined, conf);
-
-		});
 	});
 };
 

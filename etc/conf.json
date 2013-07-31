@@ -5,7 +5,8 @@
 
 		"cluster": {
 			"workers": 1,
-			"threadLifetime": 0
+			"threadLifetime": 0,
+			"respawnDelayOnError": 10
 		},
 
 		"watchFilesForChange": {
@@ -29,7 +30,8 @@
 
 		"cluster": {
 			"workers": 0,
-			"threadLifetime": 14400
+			"threadLifetime": 14400,
+			"respawnDelayOnError": 3
 		},
 
 		"watchFilesForChange": {

@@ -31,7 +31,7 @@ function shutdown() {
 }
 
 function report() {
-	return 'test report';
+	return {};
 }
 
 //

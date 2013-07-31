@@ -59,6 +59,7 @@ function shutdown() {
 
 	// cleanup
 	clearInterval(threadRestartInterval);
+	waitingTimers.forEach(function(timer) { clearTimeout(timer); });
 	cc.killChangeWatchers();
 
 	if (masterRestarting) {
@@ -79,14 +80,19 @@ function handleSigTermInt() {
 		process.exit();
 		return;
 	}
-	else {
-		cc.log(cc.INFO, 'Master: Shutting down worker threads');
-	}
+
 	terminating = true;
-	eachWorker(function(worker) {
-		worker.disconnect();
-		worker.send('shutdown');
-	});
+
+	if (cluster.workers.length) {
+		cc.log(cc.INFO, 'Master: Shutting down worker threads');
+		eachWorker(function(worker) {
+			worker.disconnect();
+			worker.send('shutdown');
+		});
+	}
+	else {
+		shutdown();
+	}
 }
 
 function handleSigHup() {
@@ -107,7 +113,9 @@ var terminating = false;
 var restarting = false;
 var masterRestarting = false;
 var runningWorkerCount = 0;
+var threadCrashCounter = 0;
 var workersToRestart = [];
+var waitingTimers = [];
 
 function eachWorker(callback) {
 	for (var id in cluster.workers) callback(cluster.workers[id]);
@@ -154,6 +162,7 @@ cluster.on('online', function(worker) {
 	var w;
 	cc.log(cc.INFO, 'Master: Worker thread id #' + worker.id + ' spawned');
 	runningWorkerCount++;
+	threadCrashCounter = 0;
 
 	// shutdown workers waiting to restart
 	if (workersToRestart.length) {
@@ -168,11 +177,23 @@ cluster.on('online', function(worker) {
 });
 
 cluster.on('exit', function(worker, code, signal) {
+	var timerID;
 	cc.log(cc.INFO, 'Master: Worker #' + worker.id + ' exited with return code ' + code);
 	runningWorkerCount--;
 	if (!terminating && (code != 0 || restarting)) {
-		cc.log(cc.INFO, 'Master: Starting new worker thread');
-		cluster.fork();
+		if (code == 0 || restarting) {
+			cc.log(cc.INFO, 'Master: Starting new worker thread');
+			cluster.fork();
+		}
+		else {
+			cc.log(cc.WARN, 'Master: Worker exited with error, waiting ' + conf.cluster.respawnDelayOnError + ' secs before respawning');
+			timerID = waitingTimers.length;
+			waitingTimers.push(setTimeout(function() {
+				waitingTimers.splice(timerID, 1);
+				cc.log(cc.INFO, 'Master: Starting new worker thread');
+				cluster.fork();
+			}, conf.cluster.respawnDelayOnError * 1000));
+		}
 	}
 	else if (runningWorkerCount == 0) {
 		// no more running workers, shut down master
