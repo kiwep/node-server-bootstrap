@@ -164,7 +164,7 @@ FileWatcher.prototype.scheduleEmitTimer = function() {
 		clearTimeout(this.emitTimer);
 	}
 	if (this.reportInterval) {
-		this.emitTimer = setTimeout(bind(this.reportHits, this), this.reportInterval);
+		this.emitTimer = setTimeout(bind(this.reportHits, this), this.reportInterval * 1000);
 	}
 	else {
 		this.reportHits();

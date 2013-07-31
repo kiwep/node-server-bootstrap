@@ -14,7 +14,7 @@
 			"paths": ["etc", "js"],
 			"extensions": [".js", ".json"],
 			"exclude": ["node_modules", "^\\.", "^~"],
-			"reportInterval": 500
+			"reportInterval": 0.5
 		},
 
 		"worker": {
@@ -39,7 +39,7 @@
 			"paths": ["etc", "js"],
 			"extensions": [".js", ".json"],
 			"exclude": ["node_modules", "^\\.", "^~"],
-			"reportInterval": 7000
+			"reportInterval": 20
 		},
 
 		"worker": {
