@@ -101,6 +101,10 @@ exports.setBaseName = function(name) {
 	baseName = name;
 }
 
+exports.baseName = function() {
+	return baseName;
+}
+
 exports.savePidFile = function() {
 	var pidFileName = path.join(varDirPath, baseName + '.pid');
 	fs.writeFileSync(pidFileName, process.pid);

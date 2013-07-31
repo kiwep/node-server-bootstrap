@@ -155,7 +155,7 @@ function handleWorkerMessage(msg) {
 cc.setBaseName(path.basename(__filename, '.js'));
 
 cluster.setupMaster({
-	exec: path.join(path.dirname(__filename), 'base_worker.js')
+	exec: path.join(path.dirname(__filename), cc.baseName() + '_worker.js')
 });
 
 cluster.on('online', function(worker) {
