@@ -1,26 +1,27 @@
 # Node Server Bootstrap
 
-This project is basically a clustered server codebase. It defines a sane directory structure, implements a master process who manages a number of childs.
+This is simple clustered server base implementation. It defines a sane directory structure, implements a master process who manages a number of childs.
 
-To be precise, this is basically a working template (hence the name Bootstrap). You can start your project with these files, and just concentrate to your worker process - the Master will take care of the rest.
+To be precise, this is basically a working template (hence the name Bootstrap). You can start your project with this codebase, and - hopefully - forget about the whole cluster and master process madness, and just write your worker server.
 
 ## Features
 
 * Manager script to start, stop, restart your server
-* Configuration and evironment files
+* Configuration file for development and production
 * Worker thread lifetime management
-* Modern and resource effective file change watcher to restart your workers when a file changes
+* Modern and resource effective file change watcher to restart your workers when a file changes (even in production)
 
 ## Requirements
 
 * Node v0.10.5+
-* No module dependencies ^_^
+
+That's it, no module dependencies, nice and simple.
 
 ## Warning
 
-This is a relatively new project, and it depends on experimental features in Node. I found it pretty stable, but you sould not trust my code in production unless you understood and tested it troughly!
+This is a new project, and it depends on experimental features in Node. I found it pretty stable, but you shouldn't trust my code in production unless you understood and tested it troughly!
 
-Oh and I don't have any documentation at the moment, sorry O.o
+Oh and don't expect any documentation at the moment, sorry!
 
 ## License
 
