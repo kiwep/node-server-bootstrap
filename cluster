@@ -9,7 +9,7 @@ popd &> /dev/null
 SCPTNAME=`basename "$0"`
 PIDFILE="$ROOTDIR/var/$SCPTNAME.pid"
 
-ENVFILE="$ROOTDIR/etc/env"
+ENVFILE="$ROOTDIR/etc/env.sh"
 
 if [ -f "$ENVFILE" ]; then
 	. "$ENVFILE"
@@ -59,7 +59,7 @@ wait_for_exit() {
 }
 
 start() {
-	BINNAME="$ROOTDIR/js/$SCPTNAME.js"
+	BINNAME="$ROOTDIR/server/$SCPTNAME.js"
 	if [ -x "$BINNAME" ]; then
 		$BINNAME 2>&1 >> "$ROOTDIR/log/$SCPTNAME.log" &
 	else
@@ -69,7 +69,7 @@ start() {
 }
 
 run() {
-	BINNAME="$ROOTDIR/js/$SCPTNAME.js"
+	BINNAME="$ROOTDIR/server/$SCPTNAME.js"
 	if [ -x "$BINNAME" ]; then
 		$BINNAME
 	else
