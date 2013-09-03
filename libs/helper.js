@@ -8,7 +8,7 @@ var util = require("util");
 var fw = require('./watcher');
 var l = require('./logger');
 
-var rootDirPath = path.dirname(__filename).split(path.sep).slice(0, -2).join(path.sep);
+var rootDirPath = path.dirname(__filename).split(path.sep).slice(0, -1).join(path.sep);
 var baseName;
 var etcDirPath = path.join(rootDirPath, 'etc');
 var varDirPath = path.join(rootDirPath, 'var');
@@ -21,6 +21,7 @@ var nodeEnv = (String(process.env['NODE_ENV']).toLowerCase() == 'production') ? 
 exports.isDevelopment = (nodeEnv == 'development');
 exports.isProduction = (nodeEnv == 'production');
 exports.confFileName = path.join(etcDirPath, 'conf.js');
+exports.rootDirPath = rootDirPath;
 
 //
 // ------------------------------------------------------------------

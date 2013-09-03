@@ -8,7 +8,7 @@ var util = require("util");
 var l = require('./logger');
 
 var watchers = [];
-var rootDirPath = path.dirname(__filename).split(path.sep).slice(0, -2).join(path.sep);
+var rootDirPath = path.dirname(__filename).split(path.sep).slice(0, -1).join(path.sep);
 
 function bind(fn, obj) {
 	return function() {

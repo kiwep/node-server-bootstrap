@@ -59,9 +59,9 @@ wait_for_exit() {
 }
 
 start() {
-	BINNAME="$ROOTDIR/server/$SCPTNAME.js"
+	BINNAME="$ROOTDIR/libs/$SCPTNAME.js"
 	if [ -x "$BINNAME" ]; then
-		$BINNAME 2>&1 >> "$ROOTDIR/log/$SCPTNAME.log" &
+		/usr/bin/env node $BINNAME 2>&1 >> "$ROOTDIR/log/$SCPTNAME.log" &
 	else
 		echo "ERROR: Can not start service, \"$BINNAME\" not found, or not executable!";
 		exit 1
@@ -69,9 +69,9 @@ start() {
 }
 
 run() {
-	BINNAME="$ROOTDIR/server/$SCPTNAME.js"
+	BINNAME="$ROOTDIR/libs/$SCPTNAME.js"
 	if [ -x "$BINNAME" ]; then
-		$BINNAME
+		/usr/bin/env node $BINNAME
 	else
 		echo "ERROR: Can not start service, \"$BINNAME\" not found, or not executable!";
 		exit 1

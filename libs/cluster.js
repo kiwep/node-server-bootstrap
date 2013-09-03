@@ -12,9 +12,9 @@
 var path = require('path');
 var cluster = require('cluster');
 var os = require('os');
-var ch = require('./libs/helper');
-var fw = require('./libs/watcher');
-var l = require('./libs/logger');
+var ch = require('./helper');
+var fw = require('./watcher');
+var l = require('./logger');
 var conf = require(ch.confFileName);
 
 var threadRestartInterval;
@@ -29,7 +29,7 @@ var threadRestartInterval;
 function setup() {
 	ch.setBaseName(path.basename(__filename, '.js'));
 	l.setLogLevel(conf.logLevel);
-	cluster.setupMaster({ exec: path.join(path.dirname(__filename), 'worker.js') });
+	cluster.setupMaster({ exec: path.join(ch.rootDirPath, conf.cluster.workerFilePath) });
 }
 
 // Startup workers and watchers

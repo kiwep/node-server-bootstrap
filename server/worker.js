@@ -6,9 +6,8 @@
  *
  */
 
-var ch = require('./libs/helper');
-var l = require('./libs/logger');
-
+var ch = require('../libs/helper');
+var l = require('../libs/logger');
 var conf = require(ch.confFileName);
 
 //

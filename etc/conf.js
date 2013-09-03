@@ -32,6 +32,9 @@ conf.general = {
 		// Number of worker threads. 0 = number of processor cores.
 		workers: 0,
 
+		// The relative path to the worker file.
+		workerFilePath: "server/worker.js",
+
 		// Workers will be respawned after the end of their lifetime. 0 = no respawn.
 		// It's generally a good idea to design the workers to be able to die gacefully as
 		// restarting the workers eliminates leaks and such. Workers are restarted
